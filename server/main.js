@@ -5,9 +5,30 @@ const webpack = require('webpack')
 const webpackConfig = require('../config/webpack.config')
 const project = require('../config/project.config')
 const compress = require('compression')
+const factory = require('./workers/factory')
+const GetMoviesHandler = require('./workers/http/getMovies')
+
+// challenge bootstrapping
+require('dotenv').config()
+
+factory.bootstrap()
+const getMoviesHandler = new GetMoviesHandler()
+getMoviesHandler.run('https://data.sfgov.org/resource/wwmu-gmzc.json')
+
+// const config = require('./workers/config')
+// const fivebeans = require('fivebeans') // del
+// const client = new fivebeans.client(process.env.BEANSTALKD_HOST, process.env.BEANSTALKD_PORT)
+// client.on('connect', () => {
+//   client.use(config.http.geoCoordTube, (err) => {
+//     if (err) throw err
+//     client.put(0, 0, 60, JSON.stringify({ throw: true, result: 'success', movie: [
+//       { locations: 'Webster Street' },
+//       { locations: 'Telegraph Hill Blvd (Telegraph Hill)' }
+//     ] }), () => {})
+//   })
+// }).connect()
 
 const app = express()
-
 // Apply gzip compression
 app.use(compress())
 
