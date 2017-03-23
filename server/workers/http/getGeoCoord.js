@@ -2,7 +2,9 @@
  * Created by alanyu on 3/19/17.
  */
 
+const fivebeans = require('fivebeans')
 const NodeGeocoder = require('node-geocoder')
+const config = require('../config')
 
 const options = {
   provider: 'google',
@@ -15,7 +17,7 @@ class Handler {
   getGeocode (address) {
     const geocoder = NodeGeocoder(options)
     return new Promise((resolve, reject) => {
-      geocoder.geocode(`country:United States&city:San Francisco&${address}`, (err, res) => {
+      geocoder.geocode(`country:United States&city:San Francisco&${address.trim()}`, (err, res) => {
         if (err) {
           reject(err)
         }
@@ -24,13 +26,29 @@ class Handler {
     })
   }
 
-  saveToDb (movie, scenes) {
-    // console.log(scenes)
+  saveToDb (movie, locations) {
+    const client = new fivebeans.client(process.env.BEANSTALKD_HOST, process.env.BEANSTALKD_PORT)
+
+    const data = {
+      title: movie[0].title,
+      locations: locations
+    }
+
+    client.on('connect', () => {
+      client.use(config.db.addToCollectionTube, (err) => {
+        if (err) throw err
+        client.put(0, 0, 60, JSON.stringify({
+          throw: true,
+          result: 'success',
+          collection: 'movies',
+          data: data
+        }), () => {})
+      })
+    }).connect()
   }
 
   run (payload, job_info) {
     const { movie } = payload
-
     const scenes = movie.map((scene) => {
       if (scene.hasOwnProperty('locations') && scene.locations !== '') {
         // node-geocoder has an advanced usage but concatenates the search by using |.
@@ -40,19 +58,17 @@ class Handler {
 
     return Promise.all(scenes).then((values) => {
       values = values.reduce((results, value) => {
-        if (value.length > 0) {
+        if (value && value.length > 0) {
           results.push(value[0])
         }
         return results
       }, [])
 
-      if (values.length > 0) {
-        this.saveToDb(movie, values)
-      }
+      this.saveToDb(movie, values)
 
       return 'success'
     }).catch(reason => {
-      return ['release', 120]
+      return ['release', 3600]
     })
   }
 }

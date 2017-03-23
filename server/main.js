@@ -6,14 +6,10 @@ const webpackConfig = require('../config/webpack.config')
 const project = require('../config/project.config')
 const compress = require('compression')
 const factory = require('./workers/factory')
-const GetMoviesHandler = require('./workers/http/getMovies')
 
 // challenge bootstrapping
 require('dotenv').config()
-
 factory.bootstrap()
-const getMoviesHandler = new GetMoviesHandler()
-getMoviesHandler.run('https://data.sfgov.org/resource/wwmu-gmzc.json')
 
 // const config = require('./workers/config')
 // const fivebeans = require('fivebeans') // del
