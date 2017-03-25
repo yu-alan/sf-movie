@@ -8,6 +8,8 @@ const constants = require('../../constants')
 class Handler {
 
   insertToCollection (collection, movie) {
+    movie = this.formatMoviesData(movie)
+
     return new Promise((resolve, reject) => {
       MongoClient.connect(constants.url, (err, db) => {
         if (err) {
@@ -34,6 +36,7 @@ class Handler {
       })
     })
 
+    movie.searchPattern = movie.title.toUpperCase()
     movie.locations = locations
     return movie
   }
@@ -46,7 +49,7 @@ class Handler {
         }
 
         db.collection(collection).findOne({ title: movie.title }, { fields: { title: 1 } }, (doc) => {
-          const found = doc.title !== null
+          const found = doc !== null
           resolve(found)
           db.close()
         })

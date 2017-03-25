@@ -66,7 +66,8 @@ describe('DB Workers', function () {
           { longitude: 37.7908379, latitude: -122.3893566, formattedAddress: 'test1' },
           { longitude: 38.7908379, latitude: -123.3893566, formattedAddress: 'test2' },
           { longitude: 39.7908379, latitude: -124.3893566, formattedAddress: 'test3' }
-        ]
+        ],
+        searchPattern: 'TESTMOVIE'
       }
 
       const result = addToMovieCollection.formatMoviesData(movie)
