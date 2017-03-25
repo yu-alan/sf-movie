@@ -5,7 +5,7 @@
 // The purpose of this file is to subscribe the workers to their assigned tubes
 const Worker = require('bsw')
 const GetGeoCoord = require('./http/getGeoCoord')
-const AddToCollection = require('./db/addToCollection')
+const AddToCollection = require('./db/addToMovieCollection')
 const config = require('./config')
 
 module.exports = {
