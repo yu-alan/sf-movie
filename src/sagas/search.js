@@ -20,8 +20,10 @@ const fetchSearchedMovies = (phrase) => {
 
 function* getSearchedMovies (action) {
   yield put({ type: UPDATE_LAST_SEARCH_PHRASE, phrase: action.phrase })
-  const results = yield call(fetchSearchedMovies, action.phrase)
-
+  let results = []
+  if (action.phrase !== '') {
+    results = yield call(fetchSearchedMovies, action.phrase)
+  }
   yield put({ type: UPDATE_SEARCHED_MOVIES, results })
 }
 
