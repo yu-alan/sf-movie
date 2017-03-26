@@ -1,4 +1,6 @@
 .search {
+  position: relative;
+  z-index: 10;
   width: 60%;
   margin: 0 auto;
 }
@@ -15,5 +17,9 @@
     border-bottom: 1px solid #cccccc;
     background-color: white;
     cursor: pointer;
+
+    &:hover {
+      background-color: #e4e4e4;
+    }
   }
 }
