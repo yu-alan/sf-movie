@@ -2,6 +2,7 @@
  * Created by alanyu on 3/26/17.
  */
 import React, { PureComponent, PropTypes } from 'react'
+import SearchItem from './SearchItem'
 import './style.scss'
 
 class Search extends PureComponent {
@@ -9,6 +10,7 @@ class Search extends PureComponent {
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   handleSearch () {
@@ -17,6 +19,15 @@ class Search extends PureComponent {
     if (lastSearchPhrase !== this.input.value) {
       fetchSearchedMovies(this.input.value)
     }
+  }
+
+  handleClick (result) {
+    const { clearResults, fetchMovieLocationsById } = this.props
+
+    clearResults()
+    this.input.value = result.title
+
+    fetchMovieLocationsById(result._id)
   }
 
   handleChange (event) {
@@ -30,12 +41,12 @@ class Search extends PureComponent {
   render () {
     const { results } = this.props
     const resultNodes = results.map((result, index) => (
-      <li key={index}>{result.title}</li>
+      <SearchItem key={index} result={result} onClick={this.handleClick} />
     ))
 
     return (
       <div className="search">
-        <input ref={(input) => { this.input = input }} className='search-input' onChange={this.handleChange} />
+        <input placeholder="Search for a movie..." ref={(input) => { this.input = input }} className='search-input' onChange={this.handleChange} />
         <ul className="search-results">
           { resultNodes }
         </ul>
@@ -45,6 +56,8 @@ class Search extends PureComponent {
 }
 
 Search.propTypes = {
+  clearResults: PropTypes.func.isRequired,
+  fetchMovieLocationsById: PropTypes.func.isRequired,
   fetchSearchedMovies: PropTypes.func.isRequired,
   lastSearchPhrase: PropTypes.string.isRequired,
   results: PropTypes.array.isRequired

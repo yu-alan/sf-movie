@@ -6,5 +6,6 @@ const router = express.Router()
 const movieController = require('../controllers/movieController')
 
 router.post('/search', movieController.search)
+router.post('/locations', movieController.locations)
 
 module.exports = router

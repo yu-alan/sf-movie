@@ -9,9 +9,23 @@ import {
   UPDATE_LAST_SEARCH_PHRASE
 } from 'store/search'
 
+import {
+  FETCH_MOVIE_LOCATIONS_BY_ID,
+  UPDATE_MOVIE_LOCATIONS
+} from 'store/map'
+
 const fetchSearchedMovies = (phrase) => {
   return new Promise((resolve, reject) => {
     return axios.post('/api/movies/search', { phrase: phrase })
+      .then((response) => {
+        resolve(response.data)
+      })
+  })
+}
+
+const fetchMovieLocationsById = (id) => {
+  return new Promise((resolve, reject) => {
+    return axios.post('/api/movies/locations', { id: id })
       .then((response) => {
         resolve(response.data)
       })
@@ -27,8 +41,15 @@ function* getSearchedMovies (action) {
   yield put({ type: UPDATE_SEARCHED_MOVIES, results })
 }
 
+function* getMovieLocationsById (action) {
+  const results = yield call(fetchMovieLocationsById, action.id)
+  const locations = results.locations
+  yield put({ type: UPDATE_MOVIE_LOCATIONS, locations })
+}
+
 export default function* search () {
   yield [
-    takeEvery(FETCH_SEARCHED_MOVIES, getSearchedMovies)
+    takeEvery(FETCH_SEARCHED_MOVIES, getSearchedMovies),
+    takeEvery(FETCH_MOVIE_LOCATIONS_BY_ID, getMovieLocationsById)
   ]
 }

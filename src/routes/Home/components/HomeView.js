@@ -1,17 +1,12 @@
 import React from 'react'
-import GoogleMapReact from 'google-map-react'
 import './HomeView.scss'
 import Search from 'containers/SearchContainer'
+import Map from 'containers/MapContainer'
 
 export const HomeView = () => (
   <div>
     <Search />
-    <div className='map'>
-      <GoogleMapReact
-        defaultCenter={{ lat: 59.95, lng: 30.33 }}
-        defaultZoom={11}
-      />
-    </div>
+    <Map />
   </div>
 )
 

@@ -3,8 +3,13 @@
  */
 import { connect } from 'react-redux'
 import {
-  fetchSearchedMovies
+  fetchSearchedMovies,
+  updateSearchMovieResults
 } from 'store/search'
+import {
+  fetchMovieLocationsById
+} from 'store/map'
+
 import Search from '../components/Search'
 
 const mapStateToProps = (state) => ({
@@ -13,6 +18,12 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
+  clearResults: () => {
+    dispatch(updateSearchMovieResults([]))
+  },
+  fetchMovieLocationsById: (id) => {
+    dispatch(fetchMovieLocationsById(id))
+  },
   fetchSearchedMovies: (phrase) => {
     dispatch(fetchSearchedMovies(phrase))
   }
