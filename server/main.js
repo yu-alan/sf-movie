@@ -1,4 +1,5 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const debug = require('debug')('app:server')
 const path = require('path')
 const webpack = require('webpack')
@@ -6,27 +7,23 @@ const webpackConfig = require('../config/webpack.config')
 const project = require('../config/project.config')
 const compress = require('compression')
 const factory = require('./workers/factory')
+const api = require('./router/api')
 
 // challenge bootstrapping
 require('dotenv').config()
 factory.bootstrap()
 
-// const config = require('./workers/config')
-// const fivebeans = require('fivebeans') // del
-// const client = new fivebeans.client(process.env.BEANSTALKD_HOST, process.env.BEANSTALKD_PORT)
-// client.on('connect', () => {
-//   client.use(config.http.geoCoordTube, (err) => {
-//     if (err) throw err
-//     client.put(0, 0, 60, JSON.stringify({ throw: true, result: 'success', movie: [
-//       { locations: 'Webster Street' },
-//       { locations: 'Telegraph Hill Blvd (Telegraph Hill)' }
-//     ] }), () => {})
-//   })
-// }).connect()
-
 const app = express()
 // Apply gzip compression
 app.use(compress())
+
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
+app.use(bodyParser.json())
+
+// primary routing
+app.use('/api', api)
 
 // ------------------------------------
 // Apply Webpack HMR Middleware
