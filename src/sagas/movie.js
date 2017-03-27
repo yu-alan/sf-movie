@@ -11,7 +11,8 @@ import {
 
 import {
   FETCH_MOVIE_LOCATIONS_BY_ID,
-  UPDATE_MOVIE_LOCATIONS
+  UPDATE_MOVIE_LOCATIONS,
+  UPDATE_MAP_BOUNDS
 } from 'store/map'
 
 const fetchSearchedMovies = (phrase) => {
@@ -37,6 +38,8 @@ function* getSearchedMovies (action) {
   let results = []
   if (action.phrase !== '') {
     results = yield call(fetchSearchedMovies, action.phrase)
+  } else {
+    yield put({ type: UPDATE_MOVIE_LOCATIONS, locations: [] })
   }
   yield put({ type: UPDATE_SEARCHED_MOVIES, results })
 }
@@ -46,7 +49,8 @@ function* getMovieLocationsById (action) {
   const results = yield call(fetchMovieLocationsById, action.id)
   const locations = results.data.locations
   const bounds = results.bounds
-  yield put({ type: UPDATE_MOVIE_LOCATIONS, locations, bounds })
+  yield put({ type: UPDATE_MOVIE_LOCATIONS, locations })
+  yield put({ type: UPDATE_MAP_BOUNDS, bounds })
 }
 
 export default function* search () {

@@ -3,6 +3,7 @@
  */
 export const FETCH_MOVIE_LOCATIONS_BY_ID = 'FETCH_MOVIE_LOCATIONS_BY_ID'
 export const UPDATE_MOVIE_LOCATIONS = 'UPDATE_MOVIE_LOCATIONS'
+export const UPDATE_MAP_BOUNDS = 'UPDATE_MAP_BOUNDS'
 
 export const fetchMovieLocationsById = (id, title) => ({
   type: FETCH_MOVIE_LOCATIONS_BY_ID,
@@ -18,7 +19,9 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_MOVIE_LOCATIONS:
-      return { ...state, locations: action.locations, bounds: action.bounds }
+      return { ...state, locations: action.locations }
+    case UPDATE_MAP_BOUNDS:
+      return { ...state, bounds: action.bounds }
     default:
       return state
   }

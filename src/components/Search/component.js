@@ -11,6 +11,7 @@ class Search extends PureComponent {
     this.handleChange = this.handleChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
     this.handleClick = this.handleClick.bind(this)
+    this.clearSearch = this.clearSearch.bind(this)
   }
 
   handleSearch () {
@@ -38,6 +39,12 @@ class Search extends PureComponent {
     this.searchTimeout = setTimeout(this.handleSearch, 1000)
   }
 
+  clearSearch () {
+    this.input.value = ''
+    this.input.focus()
+    this.handleSearch()
+  }
+
   render () {
     const { results } = this.props
     const resultNodes = results.map((result, index) => (
@@ -47,6 +54,7 @@ class Search extends PureComponent {
     return (
       <div className="search">
         <input placeholder="Search for a movie..." ref={(input) => { this.input = input }} className='search-input' onChange={this.handleChange} />
+        <button className="clear" onClick={this.clearSearch}>Clear</button>
         <ul className="search-results">
           { resultNodes }
         </ul>
