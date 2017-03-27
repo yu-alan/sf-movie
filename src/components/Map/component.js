@@ -11,11 +11,29 @@ class Map extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      size: {
-        width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-        height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
-      }
+      size: this.getWidthHeight()
     }
+    this.handleResize = this.handleResize.bind(this)
+    this.getWidthHeight = this.getWidthHeight.bind(this)
+  }
+
+  getWidthHeight () {
+    return {
+      width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+      height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+    }
+  }
+
+  handleResize () {
+    this.setState(this.getWidthHeight())
+  }
+
+  componentDidMount () {
+    window.addEventListener('resize', this.handleResize)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.handleResize)
   }
 
   render () {
@@ -42,7 +60,7 @@ class Map extends Component {
       <div className='map'>
         <GoogleMapReact
           center={center}
-          defaultZoom={zoom}
+          zoom={zoom}
         >
           { locationMarkers }
         </GoogleMapReact>
