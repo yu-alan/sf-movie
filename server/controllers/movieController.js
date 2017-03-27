@@ -28,7 +28,7 @@ exports.locations = (req, res) => {
   if (req.body.id) {
     MongoClient.connect(constants.url, (err, db) => {
       if (err) res.status(500).send('Internal error')
-      db.collection('movies').findOne({ _id : new ObjectID(req.body.id) }, { locations: 1 }, (err, result) => {
+      db.collection('movies').findOne({ _id : new ObjectID(req.body.id) }, { title: 1, locations: 1 }, (err, result) => {
         if (err) res.status(500).send('Internal error')
         db.close()
         let bounds = geolib.getBounds(result.locations)
@@ -45,6 +45,11 @@ exports.locations = (req, res) => {
           ]
           bounds = geolib.getBounds([location, ...frameBound])
         }
+
+        result.locations = result.locations.map((location) => {
+          location.title = result.title
+          return location
+        })
 
         res.send({ data: result, bounds: bounds })
       })

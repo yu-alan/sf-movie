@@ -1,24 +1,29 @@
 /**
  * Created by alanyu on 3/26/17.
  */
-import React, { PureComponent, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
+import classNames from 'classnames'
 import './style.scss'
 
-class Marker extends PureComponent {
-  constructor (props) {
-    super(props)
-  }
+const Marker = (props) => {
+  const { location, $hover } = props
+  const markerStyles = classNames('marker', {
+    'hover': $hover
+  })
 
-  render () {
-    return (
-      <div className="marker" />
-    )
-  }
-
+  return (
+    <div className={markerStyles}>
+      <div>
+        <p className="movie-title">{location.title}</p>
+        <p>{location.formattedAddress}</p>
+      </div>
+    </div>
+  )
 }
 
 Marker.propTypes = {
-  location: PropTypes.object.isRequired
+  location: PropTypes.object.isRequired,
+  $hover: PropTypes.bool
 }
 
 export default Marker
