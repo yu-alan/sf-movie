@@ -27,7 +27,7 @@ class Search extends PureComponent {
     clearResults()
     this.input.value = result.title
 
-    fetchMovieLocationsById(result._id)
+    fetchMovieLocationsById(result._id, result.title)
   }
 
   handleChange (event) {

@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
 import Map from '../components/Map'
 
 const mapStateToProps = (state) => ({
-  locations: state.map.locations
+  locations: state.map.locations,
+  bounds: state.map.bounds
 })
 
 const mapDispatchToProps = (dispatch) => ({

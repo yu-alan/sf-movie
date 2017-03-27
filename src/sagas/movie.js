@@ -42,9 +42,11 @@ function* getSearchedMovies (action) {
 }
 
 function* getMovieLocationsById (action) {
+  yield put({ type: UPDATE_LAST_SEARCH_PHRASE, phrase: action.title })
   const results = yield call(fetchMovieLocationsById, action.id)
-  const locations = results.locations
-  yield put({ type: UPDATE_MOVIE_LOCATIONS, locations })
+  const locations = results.data.locations
+  const bounds = results.bounds
+  yield put({ type: UPDATE_MOVIE_LOCATIONS, locations, bounds })
 }
 
 export default function* search () {

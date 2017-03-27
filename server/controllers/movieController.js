@@ -3,6 +3,7 @@
  */
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
+const geolib = require('geolib')
 const constants = require('../constants')
 
 exports.search = (req, res) => {
@@ -30,7 +31,8 @@ exports.locations = (req, res) => {
       db.collection('movies').findOne({ _id : new ObjectID(req.body.id) }, { locations: 1 }, (err, result) => {
         if (err) res.status(500).send('Internal error')
         db.close()
-        res.send(result)
+        const bounds = geolib.getBounds(result.locations)
+        res.send({ data: result, bounds: bounds })
       })
     })
   }

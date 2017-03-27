@@ -4,11 +4,22 @@
 import React, { Component, PropTypes } from 'react'
 import './style.scss'
 import GoogleMapReact from 'google-map-react'
+import { fitBounds } from 'google-map-react/utils'
 import Marker from './marker'
 
 class Map extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      size: {
+        width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+        height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+      }
+    }
+  }
+
   render () {
-    const { locations } = this.props
+    const { bounds, locations } = this.props
 
     const locationMarkers = locations.map((location, index) => {
       return (
@@ -16,11 +27,22 @@ class Map extends Component {
       )
     })
 
+    const { center, zoom } = fitBounds({
+      nw: {
+        lat: bounds.maxLat,
+        lng: bounds.minLng
+      },
+      se: {
+        lat: bounds.minLat,
+        lng: bounds.maxLng
+      }
+    }, this.state.size)
+
     return (
       <div className='map'>
         <GoogleMapReact
-          defaultCenter={{ lat: 37.773972, lng: -122.431297 }}
-          defaultZoom={11}
+          center={center}
+          defaultZoom={zoom}
         >
           { locationMarkers }
         </GoogleMapReact>
@@ -31,6 +53,7 @@ class Map extends Component {
 }
 
 Map.propTypes = {
+  bounds: PropTypes.object.isRequired,
   locations: PropTypes.array.isRequired
 }
 
