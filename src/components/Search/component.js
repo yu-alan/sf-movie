@@ -40,9 +40,12 @@ class Search extends PureComponent {
   }
 
   clearSearch () {
+    const { fetchMovieLocationsByCoords } = this.props
+
     this.input.value = ''
     this.input.focus()
     this.handleSearch()
+    fetchMovieLocationsByCoords()
   }
 
   render () {
@@ -65,6 +68,7 @@ class Search extends PureComponent {
 
 Search.propTypes = {
   clearResults: PropTypes.func.isRequired,
+  fetchMovieLocationsByCoords: PropTypes.func.isRequired,
   fetchMovieLocationsById: PropTypes.func.isRequired,
   fetchSearchedMovies: PropTypes.func.isRequired,
   lastSearchPhrase: PropTypes.string.isRequired,

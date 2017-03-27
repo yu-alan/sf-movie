@@ -13,6 +13,7 @@ class Map extends Component {
     this.state = {
       size: this.getWidthHeight()
     }
+    this.handleChange = this.handleChange.bind(this)
     this.handleResize = this.handleResize.bind(this)
     this.getWidthHeight = this.getWidthHeight.bind(this)
   }
@@ -21,6 +22,21 @@ class Map extends Component {
     return {
       width: window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
       height: window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+    }
+  }
+
+  handleChange (map) {
+    const { lastSearchPhrase, fetchMovieLocationsByCoords, updateMapFrame } = this.props
+    const frame = []
+    Object.keys(map.bounds).forEach((key) => {
+      const bound = map.bounds[key]
+      frame.push({ latitude: bound.lat, longitude: bound.lng })
+    })
+
+    updateMapFrame(frame)
+
+    if (lastSearchPhrase === '') {
+      fetchMovieLocationsByCoords()
     }
   }
 
@@ -59,6 +75,7 @@ class Map extends Component {
     return (
       <div className='map'>
         <GoogleMapReact
+          onChange={this.handleChange}
           center={center}
           zoom={zoom}
         >
@@ -67,11 +84,12 @@ class Map extends Component {
       </div>
     )
   }
-
 }
 
 Map.propTypes = {
   bounds: PropTypes.object.isRequired,
+  fetchMovieLocationsByCoords: PropTypes.func.isRequired,
+  lastSearchPhrase: PropTypes.string.isRequired,
   locations: PropTypes.array.isRequired
 }
 

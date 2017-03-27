@@ -7,7 +7,8 @@ import {
   updateSearchMovieResults
 } from 'store/search'
 import {
-  fetchMovieLocationsById
+  fetchMovieLocationsById,
+  fetchMovieLocationsByCoords
 } from 'store/map'
 
 import Search from '../components/Search'
@@ -26,6 +27,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   fetchSearchedMovies: (phrase) => {
     dispatch(fetchSearchedMovies(phrase))
+  },
+  fetchMovieLocationsByCoords: () => {
+    dispatch(fetchMovieLocationsByCoords())
   }
 })
 

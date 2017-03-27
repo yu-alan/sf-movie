@@ -54,5 +54,32 @@ exports.locations = (req, res) => {
         res.send({ data: result, bounds: bounds })
       })
     })
+  } else if (req.body.coords) {
+    const bounds = req.body.coords
+    MongoClient.connect(constants.url, (err, db) => {
+      if (err) res.status(500).send('Internal error')
+
+      db.collection('movies').find({ locations: { $gt: [] } }, { locations: 1, title: 1 }, { limit: 15 }).toArray((err, result) => {
+        if (err) res.status(500).send('Internal error')
+        db.close()
+
+        const locations = []
+
+        result.forEach((movie) => {
+          movie.locations.forEach((location) => {
+            if (geolib.isPointInside(location, bounds)) {
+              locations.push({
+                title: movie.title,
+                latitude: location.latitude,
+                longitude: location.longitude,
+                formattedAddress: location.formattedAddress
+              })
+            }
+          })
+        })
+
+        res.send(locations)
+      })
+    })
   }
 }
