@@ -21,8 +21,8 @@ const mapDispatchToProps = (dispatch) => ({
   clearResults: () => {
     dispatch(updateSearchMovieResults([]))
   },
-  fetchMovieLocationsById: (id) => {
-    dispatch(fetchMovieLocationsById(id))
+  fetchMovieLocationsById: (id, title) => {
+    dispatch(fetchMovieLocationsById(id, title))
   },
   fetchSearchedMovies: (phrase) => {
     dispatch(fetchSearchedMovies(phrase))
