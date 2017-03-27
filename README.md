@@ -1,3 +1,50 @@
+# SF Movie
+
+The application allows users to find locations in San Francisco where movies have been shot there. The challenge is considered a full-stack problem where the main technologies used were:
+
+- ReactJS (Frontend)
+- Node.js (v6.x.x)
+- MongoDB (v3.2.x)
+- Beanstalkd (v1.10)
+
+The project is built on top of [React Redux Starter Kit](https://github.com/davezuko/react-redux-starter-kit) and [Node geocoder](https://github.com/nchaulet/node-geocoder) to convert locations in to longitude and latitude format.
+
+### Installation
+You will need to have installed the following: [MongoDb](https://docs.mongodb.com/manual/installation/) and [Beanstalkd](http://kr.github.io/beanstalkd/download.html)
+
+```javascript
+cd sf-movie
+yarn install
+```
+
+You will see a `.env.example` file in the root directory of the project. Please use that as a template and create a `.env` by filling in the necessary API keys.
+
+```javascript
+GOOGLE_GEOCODING_API_KEY=
+BEANSTALKD_HOST=127.0.0.1
+BEANSTALKD_PORT=11300
+MONGODB_HOST=127.0.0.1
+MONGODB_PORT=27017
+MONGODB_DATABASE=sfmovie
+```
+
+### Getting Started
+
+To get the data from [Film Locations in San Francisco](https://data.sfgov.org/Culture-and-Recreation/Film-Locations-in-San-Francisco/yitu-d5am/data):
+
+```javascript
+cd sf-movie
+beanstalkd -p 11300
+mongod
+node libs/getMovies.js
+```
+
+To start the dev environment:
+
+```javascript
+yarn start
+```
+
 # React Redux Starter Kit
 
 [![Join the chat at https://gitter.im/davezuko/react-redux-starter-kit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/davezuko/react-redux-starter-kit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
