@@ -13,7 +13,7 @@ exports.search = (req, res) => {
     if (err) res.status(500).send('Internal error')
 
     db.collection('movies').find(
-        { searchPattern: new RegExp(searchPhrase.toUpperCase()) },
+        { searchPattern: new RegExp(searchPhrase.toUpperCase()), locations: { $gt: [] } },
         { _id: 1, title: 1 },
         { limit: 10 }
       ).toArray((err, result) => {
