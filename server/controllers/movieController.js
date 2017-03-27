@@ -31,7 +31,21 @@ exports.locations = (req, res) => {
       db.collection('movies').findOne({ _id : new ObjectID(req.body.id) }, { locations: 1 }, (err, result) => {
         if (err) res.status(500).send('Internal error')
         db.close()
-        const bounds = geolib.getBounds(result.locations)
+        let bounds = geolib.getBounds(result.locations)
+
+        if (result.locations.length === 1) {
+          // since we only have one location we need to help create a frame around that location
+
+          const location = result.locations[0]
+          const frameBound = [
+            { latitude: location.latitude - 0.01, longitude: location.longitude - 0.01 },
+            { latitude: location.latitude - 0.01, longitude: location.longitude + 0.01 },
+            { latitude: location.latitude + 0.01, longitude: location.longitude - 0.01 },
+            { latitude: location.latitude + 0.01, longitude: location.longitude + 0.01 }
+          ]
+          bounds = geolib.getBounds([location, ...frameBound])
+        }
+
         res.send({ data: result, bounds: bounds })
       })
     })
